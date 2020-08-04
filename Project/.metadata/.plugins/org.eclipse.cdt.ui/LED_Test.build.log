@@ -1,0 +1,7 @@
+19:45:32 **** Incremental Build of configuration Debug for project LED_Test ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-objcopy.exe -O ihex LED_Test.elf LED_Test.hex 
+Info: Parallel threads used: 0
+
+19:45:32 Build Finished (took 288ms)
+
