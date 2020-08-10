@@ -42,7 +42,8 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define	MAX_SIZE	100
+#define	int2char(i)	((char)(i+(int)'0'))
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -71,7 +72,7 @@ void MX_USB_HOST_Process(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-  uint8_t	data = 'a';
+  int	cnt;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -106,6 +107,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  cnt = 1;
+
   while (1)
   {
 	/*
@@ -123,8 +126,27 @@ int main(void)
 
 	HAL_Delay(500);
 	*/
-	HAL_UART_Transmit(&huart2,&data,1,10);
+	int		ptr;
+	char	buf[MAX_SIZE];
+
+	buf[0] = ' ';
+	ptr = 1;
+
+	for(int n=cnt;n>0;n/=10)
+	{
+		int	d;
+
+		d = n%10;
+		buf[ptr++] = int2char(d);
+	}
+
+	for(int i=ptr-1;i>=0;i--)
+	{
+		HAL_UART_Transmit(&huart2,&buf[i],1,10);
+	}
+
 	HAL_Delay(1000);
+	cnt++;
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
 
