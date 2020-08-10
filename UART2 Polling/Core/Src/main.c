@@ -108,10 +108,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	char	data = 'a';
+	char	data;
 
-	HAL_UART_Transmit(&huart2,&data,sizeof(char),10);
-	HAL_Delay(1000);
+	if( HAL_UART_Receive(&huart2,&data,sizeof(char),10) == HAL_OK )
+	{
+		HAL_UART_Transmit(&huart2,&data,sizeof(char),10);
+	}
     /* USER CODE END WHILE */
     MX_USB_HOST_Process();
 
