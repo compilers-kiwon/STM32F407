@@ -53,7 +53,17 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+typedef struct customer1 {
+	int height;
+	int weight;
+	char name;
+} customer_type1;
 
+typedef struct customer2 {
+	char name;
+	int height;
+	int weight;
+} __attribute__ ((__packed__)) customer_type2;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -114,7 +124,7 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   uint8_t	eeprom_data[EEPROM_DATA_SIZE];
-
+  customer_type2	c2;
   printf("<Initialization>\n");
   for(int i=0;i<EEPROM_DATA_SIZE;i++)
   {
@@ -143,6 +153,16 @@ int main(void)
   {
 	printf("Mem[%d] = %02x\n",i,eeprom_data[i]);
   }
+
+  printf("%d\n",sizeof(customer_type1));
+  printf("%d\n",sizeof(customer_type2));
+
+  printf("0x%08X\n",&c2.name);
+  printf("0x%08X\n",&c2.height);
+  printf("0x%08X\n",&c2.weight);
+
+  c2.height = 100;
+  c2.weight = 200;
 
   while (1)
   {
