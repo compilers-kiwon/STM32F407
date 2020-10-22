@@ -1,0 +1,16 @@
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/arch=x86
+LaunchTargetManager/org.eclipse.launchbar.core.launchTargetType.local,Local/os=win32
+configDescList=org.eclipse.launchbar.core.descriptorType.default\:Timer Interrupt.elf,org.eclipse.launchbar.core.descriptorType.default\:EXTernal Interrupt.elf
+eclipse.preferences.version=1
+org.eclipse.launchbar.core.descriptorType.default\:EXTernal\ Interrupt.elf/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:EXTernal\ Interrupt.elf/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:GPIO\ control\ for\ LED.elf/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:GPIO\ control\ for\ LED.elf/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:Timer\ Interrupt.elf/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:Timer\ Interrupt.elf/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:UART2\ Interrupt.elf/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:UART2\ Interrupt.elf/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:UART2\ Printf.elf/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:UART2\ Printf.elf/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
+org.eclipse.launchbar.core.descriptorType.default\:UART_POLLING.elf/activeLaunchMode=debug
+org.eclipse.launchbar.core.descriptorType.default\:UART_POLLING.elf/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local

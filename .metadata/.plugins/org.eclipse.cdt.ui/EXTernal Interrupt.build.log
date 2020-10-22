@@ -1,0 +1,45 @@
+09:09:59 **** Incremental Build of configuration Debug for project EXTernal Interrupt ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -std=gnu11 -DUSE_HAL_DRIVER -DSTM32F407xx -I../Core/Inc -I../USB_HOST/App -I../USB_HOST/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Host_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Host_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -ffunction-sections -fdata-sections -g -fstack-usage -Wall -specs=nano.specs -o Core\Src\main.o ..\Core\Src\main.c 
+..\Core\Src\main.c: In function 'HAL_GPIO_EXTI_Callback':
+..\Core\Src\main.c:183:37: warning: implicit declaration of function 'strlen' [-Wimplicit-function-declaration]
+  HAL_UART_Transmit(&huart2,msg[ptr],strlen(msg[ptr]),10);
+                                     ^~~~~~
+..\Core\Src\main.c:183:37: warning: incompatible implicit declaration of built-in function 'strlen'
+..\Core\Src\main.c:183:37: note: include '<string.h>' or provide a declaration of 'strlen'
+..\Core\Src\main.c:183:28: warning: passing argument 2 of 'HAL_UART_Transmit' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  HAL_UART_Transmit(&huart2,msg[ptr],strlen(msg[ptr]),10);
+                            ^~~
+In file included from ../Core/Inc/stm32f4xx_hal_conf.h:404:0,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ..\Core\Src\main.c:21:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:696:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'const char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+..\Core\Src\main.c:188:28: warning: passing argument 2 of 'HAL_UART_Transmit' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+  HAL_UART_Transmit(&huart2,msg[ptr],strlen(msg[ptr]),10);
+                            ^~~
+In file included from ../Core/Inc/stm32f4xx_hal_conf.h:404:0,
+                 from ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:30,
+                 from ../Core/Inc/main.h:31,
+                 from ..\Core\Src\main.c:21:
+../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:696:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'const char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+arm-atollic-eabi-gcc -o EXTernal Interrupt.elf Core\Src\gpio.o Core\Src\i2c.o Core\Src\i2s.o Core\Src\main.o Core\Src\spi.o Core\Src\stm32f4xx_hal_msp.o Core\Src\stm32f4xx_it.o Core\Src\syscalls.o Core\Src\system_stm32f4xx.o Core\Src\tim.o Core\Src\usart.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_exti.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ex.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_flash_ramfunc.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hcd.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2s.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2s_ex.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_pwr_ex.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.o Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.o Middlewares\ST\STM32_USB_Host_Library\Class\CDC\Src\usbh_cdc.o Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_core.o Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_ctlreq.o Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_ioreq.o Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_pipes.o USB_HOST\App\usb_host.o USB_HOST\Target\usbh_conf.o USB_HOST\Target\usbh_platform.o startup\startup_stm32f407xx.o -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -T../STM32F407VG_FLASH.ld -specs=nosys.specs -static -Wl,-Map=EXTernal Interrupt.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.3.0\Tools\arm-atollic-reports.jar sizeinfo list EXTernal Interrupt.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  37424	    152	   3660	  41236	   a114	EXTernal Interrupt.elf
+Print size information done
+Generate listing file
+Output sent to: EXTernal Interrupt.list
+Generate listing file done
+Generate build reports done
+arm-atollic-eabi-objcopy.exe -O ihex EXTernal Interrupt.elf EXTernal Interrupt.hex 
+Info: Parallel threads used: 1
+
+09:10:00 Build Finished (took 1s.95ms)
+
