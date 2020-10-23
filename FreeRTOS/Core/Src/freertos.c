@@ -26,7 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -36,7 +36,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define	MAX_STATE		2
+#define	MAX_STR_SIZE	10
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -46,7 +47,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+const char	state[MAX_STATE][MAX_STR_SIZE] = {"OFF","ON"};
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -113,7 +114,9 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   LD3TaskHandle = osThreadNew(LD3Task, NULL, &LD3Task_attributes);
+  printf("LD3Task has been created\n");
   LD4TaskHandle = osThreadNew(LD4Task, NULL, &LD4Task_attributes);
+  printf("LD4Task has been created\n");
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -150,6 +153,7 @@ void LD3Task(void *argument)
   for(;;)
   {
 	HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_13);
+	printf("LD3 %s\n",&state[HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_13)][0]);
     osDelay(500);
   }
   /* USER CODE END StartDefaultTask */
@@ -164,7 +168,8 @@ void LD4Task(void *argument)
   for(;;)
   {
 	HAL_GPIO_TogglePin(GPIOD,GPIO_PIN_12);
-    osDelay(200);
+	printf("LD4 %s\n",&state[HAL_GPIO_ReadPin(GPIOD,GPIO_PIN_12)][0]);
+    osDelay(700);
   }
   /* USER CODE END StartDefaultTask */
 }

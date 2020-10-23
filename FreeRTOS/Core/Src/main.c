@@ -30,7 +30,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -40,6 +40,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define	UART_BUFFER_SIZE	10
+#define	UART_TIMEOUT		10
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -50,7 +52,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t	uart2_rx_data[UART_BUFFER_SIZE];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -62,7 +64,20 @@ void MX_FREERTOS_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int	_write(int file,char* p,int len)
+{
+	HAL_UART_Transmit(&huart2,p,len,UART_TIMEOUT);
+	return	len;
+}
 
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if( huart->Instance == USART2 )
+	{
+		HAL_UART_Receive_IT(&huart2,uart2_rx_data,UART_BUFFER_SIZE);
+		HAL_UART_Transmit(&huart2,uart2_rx_data,UART_BUFFER_SIZE,UART_TIMEOUT);
+	}
+}
 /* USER CODE END 0 */
 
 /**
