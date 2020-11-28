@@ -186,7 +186,7 @@ void LDBlinkTask(void* argument)
   int	current = 0;
 
   HAL_GPIO_TogglePin(GPIO_LD,LD_GPIO_Pin[current]);
-  printf("%d\n",current);
+  printf("STM32CubeIDE 1.5.0 %d\n",current);
   osDelay(LD_ON_time[current]);
 
   for(;;)
@@ -194,7 +194,7 @@ void LDBlinkTask(void* argument)
 	HAL_GPIO_TogglePin(GPIO_LD,LD_GPIO_Pin[current]);
 	current=get_next_ld(current);
 	HAL_GPIO_TogglePin(GPIO_LD,LD_GPIO_Pin[current]);
-	printf("%d\n",current);
+	printf("STM32CubeIDE 1.5.0 %d\n",current);
 	osDelay(LD_ON_time[current]);
   }
   /* USER CODE END StartDefaultTask */
