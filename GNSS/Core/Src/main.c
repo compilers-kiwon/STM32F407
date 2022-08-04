@@ -23,12 +23,12 @@
 #include "i2s.h"
 #include "spi.h"
 #include "usart.h"
-#include "usb_host.h"
+#include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "usbh_def.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,22 +58,18 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t UART_Receive_data[UART_BUFFER_SIZE],tx_buffer[TX_BUFFER_SIZE];
+uint8_t		UART_Receive_data[UART_BUFFER_SIZE],tx_buffer[TX_BUFFER_SIZE];
 uint32_t	head,tail;
-extern USBH_HandleTypeDef	hUsbHostFS;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void MX_USB_HOST_Process(void);
-
 /* USER CODE BEGIN PFP */
 #ifdef __GNUC__
 #define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
 #else
 #define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
 #endif
-extern USBH_StatusTypeDef	USBH_CDC_Transmit(USBH_HandleTypeDef*,uint8_t*,uint32_t);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -145,11 +141,12 @@ int main(void)
   MX_I2S3_Init();
   MX_SPI1_Init();
   MX_USART2_UART_Init();
-  MX_USB_HOST_Init();
   MX_I2C3_Init();
   MX_DMA_Init();
   MX_USART3_UART_Init();
+  MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+  config_imu_interface();
   init_uart_dma(&huart3);clear_uart_dma();
   /* USER CODE END 2 */
 
@@ -165,14 +162,15 @@ int main(void)
 
 		if( pos == TX_BUFFER_SIZE )
 		{
-			HAL_UART_Transmit(&huart2,tx_buffer,TX_BUFFER_SIZE,HAL_MAX_DELAY);
+			printf("%s",tx_buffer);
 			pos = 0;
 		}
 	  }
-	  /* USER CODE END WHILE */
-	  MX_USB_HOST_Process();
 
-	  /* USER CODE BEGIN 3 */
+	  lsm6dsox_sh_lis2mdl();
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
@@ -255,4 +253,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-

@@ -36,6 +36,12 @@ extern I2C_HandleTypeDef hi2c1;
 extern I2C_HandleTypeDef hi2c3;
 
 /* USER CODE BEGIN Private defines */
+#define	LSM6DSOX_ADDR	0xD6U
+
+typedef union {
+	int16_t	i16bit[3];
+	uint8_t	u8bit[6];
+} axis3bit16_t;
 
 /* USER CODE END Private defines */
 
@@ -43,7 +49,8 @@ void MX_I2C1_Init(void);
 void MX_I2C3_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+extern void		config_imu_interface(void);
+extern int32_t	lsm6dsox_sh_lis2mdl(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
