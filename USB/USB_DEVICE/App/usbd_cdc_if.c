@@ -22,7 +22,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-
+#include "MyQueue.h"
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,6 +62,7 @@
   */
 
 /* USER CODE BEGIN PRIVATE_DEFINES */
+
 /* USER CODE END PRIVATE_DEFINES */
 
 /**
@@ -94,7 +95,7 @@ uint8_t UserRxBufferFS[APP_RX_DATA_SIZE];
 uint8_t UserTxBufferFS[APP_TX_DATA_SIZE];
 
 /* USER CODE BEGIN PRIVATE_VARIABLES */
-
+uint8_t	buf[MAX_BUF_SIZE+1];
 /* USER CODE END PRIVATE_VARIABLES */
 
 /**
@@ -263,6 +264,10 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   /* USER CODE BEGIN 6 */
   USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+
+  memcpy(buf,Buf,(*Len>MAX_BUF_SIZE)?MAX_BUF_SIZE:*Len);
+  buf[*Len] = 0;
+
   return (USBD_OK);
   /* USER CODE END 6 */
 }
@@ -316,10 +321,7 @@ static int8_t CDC_TransmitCplt_FS(uint8_t *Buf, uint32_t *Len, uint8_t epnum)
 }
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_IMPLEMENTATION */
-void	USB_Print(uint8_t* Buf)
-{
-	CDC_Transmit_FS(Buf,(uint16_t)strlen(Buf));
-}
+
 /* USER CODE END PRIVATE_FUNCTIONS_IMPLEMENTATION */
 
 /**

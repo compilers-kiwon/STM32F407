@@ -51,7 +51,7 @@
 #define APP_RX_DATA_SIZE  2048
 #define APP_TX_DATA_SIZE  2048
 /* USER CODE BEGIN EXPORTED_DEFINES */
-
+#define	MAX_BUF_SIZE	0x100
 /* USER CODE END EXPORTED_DEFINES */
 
 /**
@@ -64,7 +64,9 @@
   */
 
 /* USER CODE BEGIN EXPORTED_TYPES */
-
+ extern uint8_t buf[MAX_BUF_SIZE+1];
+ extern uint8_t	UserRxBufferFS[APP_RX_DATA_SIZE];
+ extern uint8_t	UserTxBufferFS[APP_TX_DATA_SIZE];
 /* USER CODE END EXPORTED_TYPES */
 
 /**
@@ -77,7 +79,17 @@
   */
 
 /* USER CODE BEGIN EXPORTED_MACRO */
+#define	USB_Printf(fmt,...)	do{\
+	sprintf((char*)UserTxBufferFS,fmt,__VA_ARGS__);\
+	while(CDC_Transmit_FS(UserTxBufferFS,strlen((char*)UserTxBufferFS))!=USBD_OK);\
+}while(0)
 
+#define	USB_Scanf(fmt,...)	do{\
+	while(strlen((char*)buf)==0);\
+	sscanf((char*)buf,fmt,__VA_ARGS__);\
+	USB_Printf("%s\n",buf);\
+	memset(buf,0,MAX_BUF_SIZE);\
+}while(0)
 /* USER CODE END EXPORTED_MACRO */
 
 /**
@@ -108,7 +120,8 @@ extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
 uint8_t CDC_Transmit_FS(uint8_t* Buf, uint16_t Len);
 
 /* USER CODE BEGIN EXPORTED_FUNCTIONS */
-extern void	USB_Print(uint8_t* Buf);
+extern int	USB_Putchar(int ch);
+extern int	USB_Getchar(void);
 /* USER CODE END EXPORTED_FUNCTIONS */
 
 /**

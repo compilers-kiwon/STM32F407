@@ -26,7 +26,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "usbd_cdc_if.h"
+#include "MyQueue.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,7 +68,7 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+  int	nCnt = 0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -104,10 +105,16 @@ int main(void)
 	  {
 		  if( i%0x1000000 == 0 )
 		  {
-			  uint8_t	buf[64];
+			  USB_Printf("Running 0x%08X...\n",(unsigned int)i);
+		  }
 
-			  sprintf(buf,"0x%08X\n",i);
-			  USB_Print(buf);
+		  if( i%0x4000000 == 0 )
+		  {
+			  int	num;
+
+			  USB_Printf("[%04d]Input Number:",nCnt);
+			  USB_Scanf("%d",&num);
+			  USB_Printf("[%04d]Input Number is %d\n",nCnt++,num);
 		  }
 	  }
     /* USER CODE END WHILE */

@@ -13,7 +13,7 @@
 **
 **  Target      : STMicroelectronics STM32
 **
-**  Distribution: The file is distributed ¡°as is,¡± without any warranty
+**  Distribution: The file is distributed ï¿½ï¿½as is,ï¿½ï¿½ without any warranty
 **                of any kind.
 **
 *****************************************************************************
@@ -100,7 +100,7 @@ __attribute__((weak)) int _read(int file, char *ptr, int len)
 		*ptr++ = __io_getchar();
 	}
 
-return len;
+	return len;
 }
 
 __attribute__((weak)) int _write(int file, char *ptr, int len)
