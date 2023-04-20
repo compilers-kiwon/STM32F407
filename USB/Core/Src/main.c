@@ -48,7 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t		pushed;
+SYS_TIME	m_SysTimer;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -161,7 +162,42 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+	if( GPIO_Pin == GPIO_PIN_0 )
+	{
+		pushed = 1;
+	}
+}
 
+void inc_execution_time(SYS_TIME* pTime)
+{
+	pTime->MSEC++;
+
+	if( pTime->MSEC >= 1000 )
+	{
+		pTime->MSEC -= 1000;
+		pTime->SEC++;
+	}
+
+	if( pTime->SEC >= 60 )
+	{
+		pTime->SEC -= 60;
+		pTime->MIN++;
+	}
+
+	if( pTime->MIN >= 60 )
+	{
+		pTime->MIN -= 60;
+		pTime->HOUR++;
+	}
+
+	if( pTime->HOUR >= 24 )
+	{
+		pTime->HOUR -= 24;
+		pTime->DAY++;
+	}
+}
 /* USER CODE END 4 */
 
 /**
@@ -181,7 +217,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
-
+  inc_execution_time(&m_SysTimer);
   /* USER CODE END Callback 1 */
 }
 

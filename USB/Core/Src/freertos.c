@@ -52,6 +52,7 @@ osThreadId Green_LED_TaskHandle;
 osThreadId Blue_LED_TaskHandle;
 osThreadId Red_LED_TaskHandle;
 osThreadId Orange_LED_TaskHandle;
+osThreadId printTaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -63,6 +64,7 @@ void LEDTask_LD4(void const * argument);
 void LEDTask_LD6(void const * argument);
 void LEDTask_LD5(void const * argument);
 void LEDTask_LD3(void const * argument);
+void printTask_func(void const * argument);
 
 extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -130,6 +132,10 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(Orange_LED_Task, LEDTask_LD3, osPriorityNormal, 0, 128);
   Orange_LED_TaskHandle = osThreadCreate(osThread(Orange_LED_Task), NULL);
 
+  /* definition and creation of printTask */
+  osThreadDef(printTask, printTask_func, osPriorityNormal, 0, 128);
+  printTaskHandle = osThreadCreate(osThread(printTask), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -143,16 +149,27 @@ void MX_FREERTOS_Init(void) {
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
+extern uint8_t	pushed;
+
 void StartDefaultTask(void const * argument)
 {
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN StartDefaultTask */
   /* Infinite loop */
-  for(int i=0;;i++)
+  for(;;)
   {
-	  USB_Printf("[%05d] This is a default task...\n",i);
-	  osDelay(1000);
+	  if( pushed == 1 )
+	  {
+		  if( osThreadIsSuspended(printTaskHandle) == osOK )
+	  	  {
+			  osThreadResume(printTaskHandle);
+	  	  }
+
+		  pushed = 0;
+	  }
+
+	  osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -235,6 +252,28 @@ void LEDTask_LD3(void const * argument)
 	  osDelay(1300);
   }
   /* USER CODE END LEDTask_LD3 */
+}
+
+/* USER CODE BEGIN Header_printTask_func */
+/**
+* @brief Function implementing the printTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_printTask_func */
+void printTask_func(void const * argument)
+{
+  /* USER CODE BEGIN printTask_func */
+  /* Infinite loop */
+  osDelay(2000);
+
+  for(;;)
+  {
+    osThreadSuspend(NULL);
+    USB_Printf("[%02d:%02d:%02d:%02d.%03d]\n",
+    		m_SysTimer.DAY,m_SysTimer.HOUR,m_SysTimer.MIN,m_SysTimer.SEC,m_SysTimer.MSEC);
+  }
+  /* USER CODE END printTask_func */
 }
 
 /* Private application code --------------------------------------------------*/
