@@ -149,7 +149,7 @@ void MX_FREERTOS_Init(void) {
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
-extern uint8_t	pushed;
+extern uint8_t	b1_pushed;
 
 void StartDefaultTask(void const * argument)
 {
@@ -159,14 +159,14 @@ void StartDefaultTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-	  if( pushed == 1 )
+	  if( b1_pushed == 1 )
 	  {
 		  if( osThreadIsSuspended(printTaskHandle) == osOK )
 	  	  {
 			  osThreadResume(printTaskHandle);
 	  	  }
 
-		  pushed = 0;
+		  b1_pushed = 0;
 	  }
 
 	  osDelay(1);
@@ -188,7 +188,7 @@ void LEDTask_LD4(void const * argument)
   /* Infinite loop */
   for(state=GPIO_PIN_SET;;state=(state+1)%2)
   {
-	  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_12,state);
+	  HAL_GPIO_WritePin(LD4_GPIO_Port,LD4_Pin,state);
 	  osDelay(1400);
   }
   /* USER CODE END LEDTask_LD4 */
@@ -208,7 +208,7 @@ void LEDTask_LD6(void const * argument)
   /* Infinite loop */
   for(state=GPIO_PIN_SET;;state=(state+1)%2)
   {
-	  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_15,state);
+	  HAL_GPIO_WritePin(LD6_GPIO_Port,LD6_Pin,state);
 	  osDelay(1100);
   }
   /* USER CODE END LEDTask_LD6 */
@@ -228,7 +228,7 @@ void LEDTask_LD5(void const * argument)
   /* Infinite loop */
   for(state=GPIO_PIN_SET;;state=(state+1)%2)
   {
-	  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_14,state);
+	  HAL_GPIO_WritePin(LD5_GPIO_Port,LD5_Pin,state);
 	  osDelay(1100);
   }
   /* USER CODE END LEDTask_LD5 */
@@ -248,7 +248,7 @@ void LEDTask_LD3(void const * argument)
   /* Infinite loop */
   for(state=GPIO_PIN_SET;;state=(state+1)%2)
   {
-	  HAL_GPIO_WritePin(GPIOD,GPIO_PIN_13,state);
+	  HAL_GPIO_WritePin(LD3_GPIO_Port,LD3_Pin,state);
 	  osDelay(1300);
   }
   /* USER CODE END LEDTask_LD3 */

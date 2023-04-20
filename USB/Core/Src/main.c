@@ -48,7 +48,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t		pushed;
+uint8_t		b1_pushed;
 SYS_TIME	m_SysTimer;
 /* USER CODE END PV */
 
@@ -164,9 +164,9 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if( GPIO_Pin == GPIO_PIN_0 )
+	if( GPIO_Pin == B1_Pin )
 	{
-		pushed = 1;
+		b1_pushed = 1;
 	}
 }
 
