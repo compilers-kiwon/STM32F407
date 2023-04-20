@@ -45,6 +45,7 @@ typedef	struct{
 } SYS_TIME;
 
 extern SYS_TIME	m_SysTimer;
+extern uint8_t	b1_pushed;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

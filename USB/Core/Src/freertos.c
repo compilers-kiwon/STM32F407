@@ -26,6 +26,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h"
+#include "i2c.h"
+#include "rng.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -35,12 +37,13 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define	EEPROM_TEST_DATA_LEN	10
+#define I2C_TIMEOUT_VALUE		10
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+#define	get_os_random_delay_time(MAX_DELAY)	(HAL_RNG_GetRandomNumber(&hrng)%(MAX_DELAY))
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -53,6 +56,7 @@ osThreadId Blue_LED_TaskHandle;
 osThreadId Red_LED_TaskHandle;
 osThreadId Orange_LED_TaskHandle;
 osThreadId printTaskHandle;
+osThreadId eepromTaskHandle;
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -65,6 +69,7 @@ void LEDTask_LD6(void const * argument);
 void LEDTask_LD5(void const * argument);
 void LEDTask_LD3(void const * argument);
 void printTask_func(void const * argument);
+void eepromTask_func(void const * argument);
 
 extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -136,6 +141,10 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(printTask, printTask_func, osPriorityNormal, 0, 128);
   printTaskHandle = osThreadCreate(osThread(printTask), NULL);
 
+  /* definition and creation of eepromTask */
+  osThreadDef(eepromTask, eepromTask_func, osPriorityNormal, 0, 128);
+  eepromTaskHandle = osThreadCreate(osThread(eepromTask), NULL);
+
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -149,8 +158,6 @@ void MX_FREERTOS_Init(void) {
   * @retval None
   */
 /* USER CODE END Header_StartDefaultTask */
-extern uint8_t	b1_pushed;
-
 void StartDefaultTask(void const * argument)
 {
   /* init code for USB_DEVICE */
@@ -189,7 +196,7 @@ void LEDTask_LD4(void const * argument)
   for(state=GPIO_PIN_SET;;state=(state+1)%2)
   {
 	  HAL_GPIO_WritePin(LD4_GPIO_Port,LD4_Pin,state);
-	  osDelay(1400);
+	  osDelay(get_os_random_delay_time(1400));
   }
   /* USER CODE END LEDTask_LD4 */
 }
@@ -209,7 +216,7 @@ void LEDTask_LD6(void const * argument)
   for(state=GPIO_PIN_SET;;state=(state+1)%2)
   {
 	  HAL_GPIO_WritePin(LD6_GPIO_Port,LD6_Pin,state);
-	  osDelay(1100);
+	  osDelay(get_os_random_delay_time(1600));
   }
   /* USER CODE END LEDTask_LD6 */
 }
@@ -229,7 +236,7 @@ void LEDTask_LD5(void const * argument)
   for(state=GPIO_PIN_SET;;state=(state+1)%2)
   {
 	  HAL_GPIO_WritePin(LD5_GPIO_Port,LD5_Pin,state);
-	  osDelay(1100);
+	  osDelay(get_os_random_delay_time(1500));
   }
   /* USER CODE END LEDTask_LD5 */
 }
@@ -249,7 +256,7 @@ void LEDTask_LD3(void const * argument)
   for(state=GPIO_PIN_SET;;state=(state+1)%2)
   {
 	  HAL_GPIO_WritePin(LD3_GPIO_Port,LD3_Pin,state);
-	  osDelay(1300);
+	  osDelay(get_os_random_delay_time(1300));
   }
   /* USER CODE END LEDTask_LD3 */
 }
@@ -274,6 +281,65 @@ void printTask_func(void const * argument)
     		m_SysTimer.DAY,m_SysTimer.HOUR,m_SysTimer.MIN,m_SysTimer.SEC,m_SysTimer.MSEC);
   }
   /* USER CODE END printTask_func */
+}
+
+/* USER CODE BEGIN Header_eepromTask_func */
+/**
+* @brief Function implementing the eepromTask thread.
+* @param argument: Not used
+* @retval None
+*/
+static uint8_t	write_data[EEPROM_TEST_DATA_LEN];
+static uint8_t	read_data[EEPROM_TEST_DATA_LEN];
+
+/* USER CODE END Header_eepromTask_func */
+void eepromTask_func(void const * argument)
+{
+  /* USER CODE BEGIN eepromTask_func */
+
+  /* Infinite loop */
+  for(int i=0;;i++)
+  {
+	memset(write_data,0xFF,EEPROM_TEST_DATA_LEN);
+	memset(read_data,0x00,EEPROM_TEST_DATA_LEN);
+
+	for(uint32_t ptr=0;ptr<EEPROM_TEST_DATA_LEN;ptr++)
+	{
+		write_data[ptr] = HAL_RNG_GetRandomNumber(&hrng)&0xFF;
+	}
+
+	if( HAL_I2C_Mem_Write(&hi2c1,0xA0,0x00,I2C_MEMADD_SIZE_8BIT,
+			write_data,sizeof(write_data),I2C_TIMEOUT_VALUE) != HAL_OK )
+	{
+		USB_Printf("%s\n","There is an error while writing eeprom.");
+	}
+
+	osDelay(10);
+
+	if( HAL_I2C_Mem_Read(&hi2c1,0xA0,0x00,I2C_MEMADD_SIZE_8BIT,
+			read_data,sizeof(read_data),I2C_TIMEOUT_VALUE) != HAL_OK )
+	{
+		USB_Printf("%s\n","There is an error while reading eeprom.");
+	}
+
+	for(uint32_t ptr=0;ptr<EEPROM_TEST_DATA_LEN;ptr++)
+	{
+		USB_Printf("[%d]0x%02X 0x%02X\n",(int)ptr,
+				(unsigned int)write_data[ptr],(unsigned int)read_data[ptr]);
+	}
+
+	if( memcmp(write_data,read_data,EEPROM_TEST_DATA_LEN) == 0 )
+	{
+		USB_Printf("[%05d]EEPROM is OK!!\n",i);
+	}
+	else
+	{
+		USB_Printf("[%05d]EEPROM is not OK!!\n",i);
+	}
+
+	osDelay(5000);
+  }
+  /* USER CODE END eepromTask_func */
 }
 
 /* Private application code --------------------------------------------------*/

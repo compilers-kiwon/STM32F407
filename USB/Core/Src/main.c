@@ -21,6 +21,7 @@
 #include "cmsis_os.h"
 #include "i2c.h"
 #include "i2s.h"
+#include "rng.h"
 #include "spi.h"
 #include "usb_device.h"
 #include "gpio.h"
@@ -95,6 +96,7 @@ int main(void)
   MX_I2C1_Init();
   MX_I2S3_Init();
   MX_SPI1_Init();
+  MX_RNG_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
