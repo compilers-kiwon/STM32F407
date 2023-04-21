@@ -19,9 +19,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "dma.h"
+#include "fatfs.h"
 #include "i2c.h"
-#include "i2s.h"
 #include "rng.h"
+#include "sdio.h"
 #include "spi.h"
 #include "usb_device.h"
 #include "gpio.h"
@@ -93,10 +95,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_I2C1_Init();
-  MX_I2S3_Init();
+  MX_DMA_Init();
   MX_SPI1_Init();
   MX_RNG_Init();
+  MX_SDIO_SD_Init();
+  MX_FATFS_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -109,6 +113,7 @@ int main(void)
   /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   while (1)
   {
     /* USER CODE END WHILE */

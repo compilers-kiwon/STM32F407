@@ -28,6 +28,7 @@
 #include "usbd_cdc_if.h"
 #include "i2c.h"
 #include "rng.h"
+#include "fatfs.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -274,11 +275,23 @@ void printTask_func(void const * argument)
   /* Infinite loop */
   osDelay(2000);
 
-  for(;;)
+  for(int mount=0;;)
   {
     osThreadSuspend(NULL);
     USB_Printf("[%02d:%02d:%02d:%02d.%03d]\n",
     		m_SysTimer.DAY,m_SysTimer.HOUR,m_SysTimer.MIN,m_SysTimer.SEC,m_SysTimer.MSEC);
+
+    if( mount == 0 )
+    {
+    	if( init_log_file() == FR_OK )
+    	{
+    		mount = 1;
+    	}
+    }
+    else
+    {
+    	USB_Printf("%s\n","FATFS has been mounted already.");
+    }
   }
   /* USER CODE END printTask_func */
 }
@@ -308,7 +321,7 @@ void eepromTask_func(void const * argument)
 		write_data[ptr] = HAL_RNG_GetRandomNumber(&hrng)&0xFF;
 	}
 
-	if( HAL_I2C_Mem_Write(&hi2c1,0xA0,0x00,I2C_MEMADD_SIZE_8BIT,
+	if( HAL_I2C_Mem_Write(&hi2c2,0xA0,0x00,I2C_MEMADD_SIZE_8BIT,
 			write_data,sizeof(write_data),I2C_TIMEOUT_VALUE) != HAL_OK )
 	{
 		USB_Printf("%s\n","There is an error while writing eeprom.");
@@ -316,7 +329,7 @@ void eepromTask_func(void const * argument)
 
 	osDelay(10);
 
-	if( HAL_I2C_Mem_Read(&hi2c1,0xA0,0x00,I2C_MEMADD_SIZE_8BIT,
+	if( HAL_I2C_Mem_Read(&hi2c2,0xA0,0x00,I2C_MEMADD_SIZE_8BIT,
 			read_data,sizeof(read_data),I2C_TIMEOUT_VALUE) != HAL_OK )
 	{
 		USB_Printf("%s\n","There is an error while reading eeprom.");
